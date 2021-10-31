@@ -29,7 +29,7 @@ const getUserWithEmail = function (email) {
       return null;
     })
     .catch((err) => {
-      return err;
+      console.log(err.message);
     });
 };
 exports.getUserWithEmail = getUserWithEmail;
@@ -53,7 +53,7 @@ const getUserWithId = function (id) {
       return null;
     })
     .catch((err) => {
-      return err;
+      console.log(err.message);
     });
 };
 exports.getUserWithId = getUserWithId;
@@ -77,7 +77,7 @@ const addUser = function (user) {
       return null;
     })
     .catch((err) => {
-      return err;
+      console.log(err.message);
     });
 };
 exports.addUser = addUser;
@@ -90,7 +90,24 @@ exports.addUser = addUser;
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function (guest_id, limit = 10) {
-  return getAllProperties(null, 2);
+  const todayDate = new Date().toISOString().slice(0, 10);
+  const queryString = `
+  SELECT * FROM reservations
+  JOIN properties ON property_id = properties.id
+  WHERE guest_id = $1
+  AND start_date <> $2
+  AND end_date <> $2
+  LIMIT $3;
+  `;
+  const values = [guest_id, todayDate, limit];
+  return pool
+    .query(queryString, values)
+    .then((response) => {
+      return response.rows;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 };
 exports.getAllReservations = getAllReservations;
 
@@ -112,9 +129,8 @@ const getAllProperties = (options, limit = 10) => {
     `,
       [limit]
     )
-    .then((result) => {
-      console.log(result.rows);
-      return result.rows;
+    .then((response) => {
+      return response.rows;
     })
     .catch((err) => {
       console.log(err.message);
