@@ -19,7 +19,7 @@ const getUserWithEmail = function (email) {
   const queryString = `
   SELECT *
   FROM users
-  WHERE email = $1
+  WHERE email = $1;
   `;
   const values = [email];
   return pool
@@ -43,7 +43,7 @@ const getUserWithId = function (id) {
   const queryString = `
   SELECT *
   FROM users
-  WHERE id = $1
+  WHERE id = $1;
   `;
   const values = [id];
   return pool
@@ -64,10 +64,21 @@ exports.getUserWithId = getUserWithId;
  * @return {Promise<{}>} A promise to the user.
  */
 const addUser = function (user) {
-  const userId = Object.keys(users).length + 1;
-  user.id = userId;
-  users[userId] = user;
-  return Promise.resolve(user);
+  const queryString = `
+  INSERT INTO users(name, email, password)
+  VALUES($1, $2, $3)
+  RETURNING *;
+  `;
+  const values = [user.name, user.email, user.password];
+  return pool
+    .query(queryString, values)
+    .then((response) => {
+      if (response.rows[0]) return response.rows[0];
+      return null;
+    })
+    .catch((err) => {
+      return err;
+    });
 };
 exports.addUser = addUser;
 
@@ -97,7 +108,7 @@ const getAllProperties = (options, limit = 10) => {
       `
     SELECT *
     FROM properties
-    LIMIT $1
+    LIMIT $1;
     `,
       [limit]
     )
