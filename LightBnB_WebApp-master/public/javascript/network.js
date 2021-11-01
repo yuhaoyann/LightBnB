@@ -9,14 +9,14 @@ function logOut() {
   return $.ajax({
     method: "POST",
     url: "/users/logout",
-  })
+  });
 }
 
 function logIn(data) {
   return $.ajax({
     method: "POST",
     url: "/users/login",
-    data
+    data,
   });
 }
 
@@ -24,7 +24,7 @@ function signUp(data) {
   return $.ajax({
     method: "POST",
     url: "/users",
-    data
+    data,
   });
 }
 
@@ -38,6 +38,14 @@ function getAllListings(params) {
   });
 }
 
+const submitReservation = function (data) {
+  return $.ajax({
+    method: "POST",
+    url: "/api/reservations",
+    data,
+  });
+};
+
 function getAllReservations() {
   let url = "/api/reservations";
   return $.ajax({
@@ -45,10 +53,10 @@ function getAllReservations() {
   });
 }
 
-const submitProperty = function(data) {
+const submitProperty = function (data) {
   return $.ajax({
     method: "POST",
     url: "/api/properties",
     data,
   });
-}
+};
