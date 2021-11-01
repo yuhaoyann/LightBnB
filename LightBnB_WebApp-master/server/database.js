@@ -1,13 +1,7 @@
-const { Pool } = require("pg");
-const pool = new Pool({
-  user: "vagrant",
-  password: "123",
-  host: "localhost",
-  database: "lightbnb",
-});
+const db = require("../db");
 
-const properties = require("./json/properties.json");
-const users = require("./json/users.json");
+// const properties = require("./json/properties.json");
+// const users = require("./json/users.json");
 /// Users
 
 /**
@@ -22,7 +16,7 @@ const getUserWithEmail = function (email) {
   WHERE email = $1;
   `;
   const values = [email];
-  return pool
+  return db
     .query(queryString, values)
     .then((response) => {
       if (response.rows[0]) return response.rows[0];
@@ -46,7 +40,7 @@ const getUserWithId = function (id) {
   WHERE id = $1;
   `;
   const values = [id];
-  return pool
+  return db
     .query(queryString, values)
     .then((response) => {
       if (response.rows[0]) return response.rows[0];
@@ -70,7 +64,7 @@ const addUser = function (user) {
   RETURNING *;
   `;
   const values = [user.name, user.email, user.password];
-  return pool
+  return db
     .query(queryString, values)
     .then((response) => {
       if (response.rows[0]) return response.rows[0];
@@ -100,7 +94,7 @@ const getAllReservations = function (guest_id, limit = 10) {
   LIMIT $3;
   `;
   const values = [guest_id, todayDate, limit];
-  return pool
+  return db
     .query(queryString, values)
     .then((response) => {
       return response.rows;
@@ -170,7 +164,7 @@ const getAllProperties = (options, limit = 10) => {
   LIMIT $${queryParams.length};
   `;
 
-  return pool
+  return db
     .query(queryString, queryParams)
     .then((response) => {
       return response.rows;
@@ -205,7 +199,7 @@ const addProperty = function (property) {
   queryString += valueString;
   queryString = queryString.slice(0, queryString.length - 2);
   queryString += ") RETURNING *;";
-  return pool
+  return db
     .query(queryString, queryParams)
     .then((response) => {
       return response.rows[0];
