@@ -84,16 +84,13 @@ exports.addUser = addUser;
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function (guest_id, limit = 10) {
-  const todayDate = new Date().toISOString().slice(0, 10);
   const queryString = `
   SELECT * FROM reservations
   JOIN properties ON property_id = properties.id
   WHERE guest_id = $1
-  AND start_date <> $2
-  AND end_date <> $2
-  LIMIT $3;
+  LIMIT $2;
   `;
-  const values = [guest_id, todayDate, limit];
+  const values = [guest_id, limit];
   return db
     .query(queryString, values)
     .then((response) => {
@@ -235,7 +232,22 @@ exports.addReservation = addReservation;
 //
 //  Gets upcoming reservations
 //
-const getUpcomingReservations = function (guest_id, limit = 10) {};
+const getUpcomingReservations = function (guest_id, limit = 10) {
+  const queryString = `
+  SELECT properties.*, reservations.*, avg(rating) as average_rating
+  FROM reservations
+  JOIN properties ON reservations.property_id = properties.id
+  JOIN property_reviews ON properties.id = property_reviews.property_id 
+  WHERE reservations.guest_id = $1
+  AND reservations.start_date > now()::date
+  GROUP BY properties.id, reservations.id
+  ORDER BY reservations.start_date
+  LIMIT $2;`;
+  const params = [guest_id, limit];
+  return pool.query(queryString, params).then((res) => res.rows);
+};
+
+exports.getUpcomingReservations = getUpcomingReservations;
 
 //
 //  Updates an existing reservation with new information
