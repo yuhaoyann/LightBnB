@@ -83,7 +83,7 @@ exports.addUser = addUser;
  * @param {string} guest_id The id of the user.
  * @return {Promise<[{}]>} A promise to the reservations.
  */
-const getAllReservations = function (guest_id, limit = 10) {
+const getFulfilledReservations = function (guest_id, limit = 10) {
   const queryString = `
   SELECT * FROM reservations
   JOIN properties ON property_id = properties.id
@@ -100,7 +100,7 @@ const getAllReservations = function (guest_id, limit = 10) {
       console.log(err.message);
     });
 };
-exports.getAllReservations = getAllReservations;
+exports.getFulfilledReservations = getFulfilledReservations;
 
 /// Properties
 

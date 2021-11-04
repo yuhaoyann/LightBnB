@@ -46,7 +46,7 @@ $(() => {
 
   $("header").on("click", ".my_reservations_button", function () {
     propertyListings.clearListings();
-    getAllReservations()
+    getFulfilledReservations()
       .then(function (json) {
         propertyListings.addProperties(json.reservations, { upcoming: false });
         views_manager.show("listings");
