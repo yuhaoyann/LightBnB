@@ -249,7 +249,7 @@ const getUpcomingReservations = function (guest_id, limit = 10) {
   ORDER BY reservations.start_date
   LIMIT $2;`;
   const params = [guest_id, limit];
-  return pool.query(queryString, params).then((res) => res.rows);
+  return db.query(queryString, params).then((res) => res.rows);
 };
 
 exports.getUpcomingReservations = getUpcomingReservations;
