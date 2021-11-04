@@ -155,6 +155,7 @@ $(() => {
       <div id="datatag" class="hidden"></div>
     </form>
   `);
+  window.$newReservationForm = $newReservationForm;
 
   $newReservationForm.on("submit", function (event) {
     event.preventDefault();
@@ -182,5 +183,4 @@ $(() => {
     views_manager.show("listings");
     return false;
   });
-  window.$newReservationForm = $newReservationForm;
 });
