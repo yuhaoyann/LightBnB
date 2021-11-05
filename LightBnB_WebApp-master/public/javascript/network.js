@@ -67,3 +67,18 @@ const submitReservation = function (data) {
     data,
   });
 };
+
+function getIndividualReservation(reservationID) {
+  let url = `/api/reservations/${reservationID}`;
+  return $.ajax({
+    url,
+  });
+}
+
+const updateReservation = function (data) {
+  return $.ajax({
+    method: "POST",
+    url: `/api/reservations/${data.reservation_id}`,
+    data,
+  });
+};

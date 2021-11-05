@@ -1,3 +1,4 @@
+const { Pool } = require("pg");
 const db = require("../db");
 
 // const properties = require("./json/properties.json");
@@ -254,10 +255,41 @@ const getUpcomingReservations = function (guest_id, limit = 10) {
 
 exports.getUpcomingReservations = getUpcomingReservations;
 
+const getIndividualReservation = function (reservationID) {
+  const queryString = `SELECT * FROM reservations WHERE reservations.id = $1`;
+  return db.query(queryString, [reservationID]).then((res) => res.rows[0]);
+};
+
+exports.getIndividualReservation = getIndividualReservation;
+
 //
 //  Updates an existing reservation with new information
 //
-const updateReservation = function (reservationId, newReservationData) {};
+const updateReservation = function (reservationData) {
+  // base string
+  let queryString = `UPDATE reservations SET `;
+  const queryParams = [];
+  let paramsCount = 0;
+  if (reservationData.start_date) {
+    paramsCount += 1;
+    queryParams.push(reservationData.start_date);
+    queryString += `start_date = $${paramsCount}`;
+  }
+  if (reservationData.end_date) {
+    paramsCount += 1;
+    queryParams.push(reservationData.end_date);
+    queryString += `, end_date = $${paramsCount}`;
+  }
+  queryString += ` WHERE id = $${queryParams.length + 1} RETURNING *;`;
+  queryParams.push(reservationData.reservation_id);
+  console.log(queryString);
+  return db
+    .query(queryString, queryParams)
+    .then((res) => res.rows[0])
+    .catch((err) => console.error(err));
+};
+
+exports.updateReservation = updateReservation;
 
 //
 //  Deletes an existing reservation
