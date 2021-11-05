@@ -18,7 +18,22 @@ $(() => {
 
     $(document).on("click", ".delete-button", function () {
       const idData = $(this).attr("id").substring(16);
-      console.log(`delete ${idData}`);
+      const data = {};
+      data.reservation_Id = idData;
+      deleteReservation(data).then(() => {});
+      views_manager.show("none");
+      propertyListings.clearListings();
+      getFulfilledReservations().then(function (json) {
+        propertyListings.addProperties(json.reservations, {
+          upcoming: false,
+        });
+        getUpcomingReservations().then((json) => {
+          propertyListings.addProperties(json.reservations, {
+            upcoming: true,
+          });
+        });
+        views_manager.show("listings");
+      });
     });
     // }
   });
