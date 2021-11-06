@@ -9,6 +9,16 @@ module.exports = function (router, database) {
       });
   });
 
+  router.get("/myProperties", (req, res) => {
+    database
+      .getMyProperties(req.query, 20)
+      .then((properties) => res.send({ properties }))
+      .catch((e) => {
+        console.error(e);
+        res.send(e);
+      });
+  });
+
   router.get("/reservations", (req, res) => {
     const userId = req.session.userId;
     if (!userId) {

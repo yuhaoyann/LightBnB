@@ -14,12 +14,16 @@ $(() => {
     $updateReservationForm.detach();
     $propertyReviews.detach();
     $newReviewForm.detach();
+    $myPropertyListings.detach();
 
     let dataTag = "";
 
     switch (item) {
       case "listings":
         $propertyListings.appendTo($main);
+        break;
+      case "myListings":
+        $myPropertyListings.appendTo($main);
         break;
       case "newProperty":
         $newPropertyForm.appendTo($main);

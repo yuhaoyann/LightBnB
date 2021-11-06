@@ -38,6 +38,16 @@ function getAllListings(params) {
   });
 }
 
+function getMyListings(params) {
+  let url = "/api/myProperties";
+  if (params) {
+    url += "?" + params;
+  }
+  return $.ajax({
+    url,
+  });
+}
+
 function getFulfilledReservations() {
   let url = "/api/reservations";
   return $.ajax({

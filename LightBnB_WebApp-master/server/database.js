@@ -177,6 +177,67 @@ const getAllProperties = (options, limit = 10) => {
 };
 exports.getAllProperties = getAllProperties;
 
+const getMyProperties = (options, limit = 10) => {
+  const queryParams = [];
+  let queryString = `
+  SELECT properties.*
+  FROM properties
+  `;
+
+  let existingWhere = 0;
+  const pushQueryString = function (parameter, sign) {
+    if (existingWhere > 0) {
+      queryString += `AND ${parameter} ${sign} $${queryParams.length} `;
+      existingWhere += 1;
+    } else {
+      queryString += `Where ${parameter} ${sign} $${queryParams.length} `;
+      existingWhere += 1;
+    }
+  };
+
+  if (options.city) {
+    queryParams.push(`%${options.city}%`);
+    pushQueryString("city", "LIKE");
+  }
+
+  if (options.owner_id) {
+    queryParams.push(options.owner_id);
+    pushQueryString("owner_id", "=");
+  }
+
+  if (options.maximum_price_per_night) {
+    queryParams.push(options.maximum_price_per_night * 100);
+    pushQueryString("cost_per_night", "<=");
+  }
+
+  if (options.minimum_price_per_night) {
+    queryParams.push(options.minimum_price_per_night * 100);
+    pushQueryString("cost_per_night", ">=");
+  }
+
+  if (options.minimum_rating) {
+    queryParams.push(options.minimum_rating);
+    pushQueryString("property_reviews.rating", ">=");
+  }
+
+  queryParams.push(limit);
+  queryString += `
+  GROUP BY properties.id
+  ORDER BY cost_per_night
+  LIMIT $${queryParams.length};
+  `;
+
+  return db
+    .query(queryString, queryParams)
+    .then((response) => {
+      return response.rows;
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+exports.getMyProperties = getMyProperties;
+
 /**
  * Add a property to the database
  * @param {{}} property An object containing all of the property details.
