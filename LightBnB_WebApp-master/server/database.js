@@ -1,4 +1,3 @@
-const { Pool } = require("pg");
 const db = require("../db");
 
 // const properties = require("./json/properties.json");
@@ -119,7 +118,7 @@ exports.getFulfilledReservations = getFulfilledReservations;
 const getAllProperties = (options, limit = 10) => {
   const queryParams = [];
   let queryString = `
-  SELECT properties.*, avg(property_reviews.rating) as average_rating
+  SELECT properties.*, avg(property_reviews.rating) as average_rating, count(property_reviews.rating) as review_count
   FROM properties
   JOIN property_reviews ON properties.id = property_id
   `;
@@ -304,3 +303,38 @@ const deleteReservation = function (reservationId) {
 };
 
 exports.deleteReservation = deleteReservation;
+
+const getReviewsByProperty = function (propertyId) {
+  const queryString = `
+    SELECT property_reviews.id, property_reviews.rating AS review_rating, property_reviews.message AS review_text, 
+    users.name, properties.title AS property_title, reservations.start_date, reservations.end_date
+    FROM property_reviews
+    JOIN reservations ON reservations.id = property_reviews.reservation_id  
+    JOIN properties ON properties.id = property_reviews.property_id
+    JOIN users ON users.id = property_reviews.guest_id
+    WHERE properties.id = $1
+    ORDER BY reservations.start_date ASC;
+  `;
+  const queryParams = [propertyId];
+  return db.query(queryString, queryParams).then((res) => res.rows);
+};
+
+exports.getReviewsByProperty = getReviewsByProperty;
+
+const addReview = function (review) {
+  const queryString = `
+    INSERT INTO property_reviews (guest_id, property_id, reservation_id, rating, message) 
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *;
+  `;
+  const queryParams = [
+    review.guest_id,
+    review.property_id,
+    review.id,
+    parseInt(review.rating),
+    review.message,
+  ];
+  return db.query(queryString, queryParams).then((res) => res.rows);
+};
+
+exports.addReview = addReview;

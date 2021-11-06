@@ -8,7 +8,6 @@ $(() => {
       views_manager.show("newReservation", idData);
     });
 
-    // if (isReservation) {
     $(document).on("click", ".update-button", function () {
       const idData = $(this).attr("id").substring(16);
       getIndividualReservation(idData).then((data) => {
@@ -35,6 +34,15 @@ $(() => {
         views_manager.show("listings");
       });
     });
-    // }
+
+    $(document).on("click", ".review_details", function () {
+      const idData = $(this).attr("id").substring(15);
+      views_manager.show("showReviews", idData);
+    });
+
+    $(document).on("click", ".add-review-button", function () {
+      const idData = $(this).attr("id").substring(11);
+      views_manager.show("newReview", idData);
+    });
   });
 });
