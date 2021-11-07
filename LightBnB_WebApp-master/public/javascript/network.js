@@ -108,6 +108,13 @@ const deleteReservation = function (data) {
   });
 };
 
+const deleteProperty = function (data) {
+  return $.ajax({
+    method: "DELETE",
+    url: `/api/myProperties/${data.property_Id}`,
+  });
+};
+
 const getReviewsByProperty = function (propertyId) {
   const url = `api/reviews/${propertyId}`;
   return $.ajax({

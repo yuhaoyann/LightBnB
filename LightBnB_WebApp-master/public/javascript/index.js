@@ -49,5 +49,20 @@ $(() => {
       const idData = $(this).attr("id").substring(16);
       views_manager.show("modifyProperty", idData);
     });
+
+    $(document).on("click", ".delete-property-button", function () {
+      const idData = $(this).attr("id").substring(16);
+      const data = {};
+      data.property_Id = idData;
+      deleteProperty(data).then(() => {});
+      views_manager.show("none");
+      getMyDetails().then(function (json) {
+        propertyListings.clearListings();
+        getMyListings(`owner_id=${json.user.id}`).then(function (json) {
+          myPropertyListings.addProperties(json.properties);
+          views_manager.show("myListings");
+        });
+      });
+    });
   });
 });

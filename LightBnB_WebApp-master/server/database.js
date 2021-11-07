@@ -365,6 +365,18 @@ const deleteReservation = function (reservationId) {
 
 exports.deleteReservation = deleteReservation;
 
+const deleteMyProperties = function (propertyId) {
+  console.log(propertyId);
+  const queryParams = [propertyId];
+  const queryString = `DELETE FROM properties WHERE id = $1;`;
+  return db
+    .query(queryString, queryParams)
+    .then(() => console.log("Successfully deleted!"))
+    .catch((err) => console.error(err));
+};
+
+exports.deleteMyProperties = deleteMyProperties;
+
 const getReviewsByProperty = function (propertyId) {
   const queryString = `
     SELECT property_reviews.id, property_reviews.rating AS review_rating, property_reviews.message AS review_text, 
