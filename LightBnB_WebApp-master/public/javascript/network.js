@@ -70,6 +70,14 @@ const submitProperty = function (data) {
   });
 };
 
+const modifyProperty = function (data) {
+  return $.ajax({
+    method: "POST",
+    url: "/api/myProperties",
+    data,
+  });
+};
+
 const submitReservation = function (data) {
   return $.ajax({
     method: "POST",

@@ -1,5 +1,5 @@
 $(() => {
-  const $newPropertyForm = $(`
+  const $modifyPropertyForm = $(`
   <form action="/api/properties" method="post" id="new-property-form" class="new-property-form">
       <div class="new-property-form__field-wrapper">
         <label for="new-property-form__title">Title</label>
@@ -37,12 +37,12 @@ $(() => {
 
       <div class="new-property-form__field-wrapper">
         <label for="new-property-form__thumbnail">Thumbnail Image</label>
-        <input placeholder="Thumbnail Image (leave blank if don't have)" type="text" name="thumbnail_photo_url" id="new-property-form__thumbnail">
+        <input placeholder="Thumbnail Image" type="text" name="thumbnail_photo_url" id="new-property-form__thumbnail">
       </div>
 
       <div class="new-property-form__field-wrapper">
         <label for="new-property-form__cover">Cover Image</label>
-        <input placeholder="Cover Image (leave blank if don't have)" type="text" name="cover_photo_url" id="new-property-form__cover">
+        <input placeholder="Cover Image" type="text" name="cover_photo_url" id="new-property-form__cover">
       </div>
 
       <hr>
@@ -77,16 +77,16 @@ $(() => {
         </div>
 
         <div class="new-property-form__field-wrapper">
-            <button>Create</button>
+            <button>Modify</button>
             <a id="property-form__cancel" href="#">Cancel</a>
         </div>
-        
+        <div id="datatag" class="hidden"></div>
     </form>
   `);
 
-  window.$newPropertyForm = $newPropertyForm;
+  window.$modifyPropertyForm = $modifyPropertyForm;
 
-  $newPropertyForm.addressfield({
+  $modifyPropertyForm.addressfield({
     json: "javascript/libraries/addressfield/addressfield.min.json",
     fields: {
       country: "#new-property-form__country",
@@ -97,15 +97,22 @@ $(() => {
     },
   });
 
-  $newPropertyForm.on("submit", function (event) {
+  $modifyPropertyForm.on("submit", function (event) {
     event.preventDefault();
 
     views_manager.show("none");
 
-    const data = $(this).serialize();
-    submitProperty(data)
+    const propertyId = $(this).find("#datatag h4").text();
+    const data = $(this).serialize().concat(`&property_id=${propertyId}`);
+    modifyProperty(data)
       .then(() => {
-        views_manager.show("listings");
+        getMyDetails().then(function (json) {
+          propertyListings.clearListings();
+          getMyListings(`owner_id=${json.user.id}`).then(function (json) {
+            myPropertyListings.addProperties(json.properties);
+            views_manager.show("myListings");
+          });
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -114,7 +121,12 @@ $(() => {
   });
 
   $("body").on("click", "#property-form__cancel", function () {
-    views_manager.show("listings");
-    return false;
+    getMyDetails().then(function (json) {
+      propertyListings.clearListings();
+      getMyListings(`owner_id=${json.user.id}`).then(function (json) {
+        myPropertyListings.addProperties(json.properties);
+        views_manager.show("myListings");
+      });
+    });
   });
 });

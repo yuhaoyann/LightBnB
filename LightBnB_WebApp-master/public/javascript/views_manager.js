@@ -5,6 +5,7 @@ $(() => {
 
   window.views_manager.show = function (item, data = "") {
     $newPropertyForm.detach();
+    $modifyPropertyForm.detach();
     $propertyListings.detach();
     $searchPropertyForm.detach();
     $logInForm.detach();
@@ -27,6 +28,12 @@ $(() => {
         break;
       case "newProperty":
         $newPropertyForm.appendTo($main);
+        break;
+      case "modifyProperty":
+        dataTag = `<h4>${data}</h4>`;
+        $modifyPropertyForm.appendTo($main);
+        $("#datatag").empty();
+        $(dataTag).appendTo("#datatag");
         break;
       case "searchProperty":
         $searchPropertyForm.appendTo($main);

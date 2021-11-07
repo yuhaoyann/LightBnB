@@ -44,5 +44,10 @@ $(() => {
       const idData = $(this).attr("id").substring(11);
       views_manager.show("newReview", idData);
     });
+
+    $(document).on("click", ".modify-property-button", function () {
+      const idData = $(this).attr("id").substring(16);
+      views_manager.show("modifyProperty", idData);
+    });
   });
 });

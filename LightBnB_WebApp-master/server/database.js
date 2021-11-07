@@ -195,35 +195,14 @@ const getMyProperties = (options, limit = 10) => {
     }
   };
 
-  if (options.city) {
-    queryParams.push(`%${options.city}%`);
-    pushQueryString("city", "LIKE");
-  }
-
   if (options.owner_id) {
     queryParams.push(options.owner_id);
     pushQueryString("owner_id", "=");
   }
 
-  if (options.maximum_price_per_night) {
-    queryParams.push(options.maximum_price_per_night * 100);
-    pushQueryString("cost_per_night", "<=");
-  }
-
-  if (options.minimum_price_per_night) {
-    queryParams.push(options.minimum_price_per_night * 100);
-    pushQueryString("cost_per_night", ">=");
-  }
-
-  if (options.minimum_rating) {
-    queryParams.push(options.minimum_rating);
-    pushQueryString("property_reviews.rating", ">=");
-  }
-
   queryParams.push(limit);
   queryString += `
-  GROUP BY properties.id
-  ORDER BY cost_per_night
+  ORDER BY properties.id
   LIMIT $${queryParams.length};
   `;
 
@@ -249,19 +228,14 @@ const addProperty = function (property) {
   let valueString = `VALUES(`;
   let valueCount = 1;
   for (let key in property) {
-    queryString += key;
-    queryString += ", ";
+    queryString += `${key}, `;
     queryParams.push(property[key]);
-    valueString += "$";
-    valueString += valueCount;
-    valueString += ", ";
+    valueString += `$${valueCount}, `;
     valueCount += 1;
   }
   queryString = queryString.slice(0, queryString.length - 2);
-  queryString += ") ";
-  queryString += valueString;
-  queryString = queryString.slice(0, queryString.length - 2);
-  queryString += ") RETURNING *;";
+  valueString = valueString.slice(0, valueString.length - 2);
+  queryString += `) ${valueString}) RETURNING *;`;
   return db
     .query(queryString, queryParams)
     .then((response) => {
@@ -272,6 +246,32 @@ const addProperty = function (property) {
     });
 };
 exports.addProperty = addProperty;
+
+const addMyProperty = function (property) {
+  let queryString = `UPDATE properties SET `;
+  let queryParams = [];
+  let valueCount = 1;
+  for (let key in property) {
+    if (key !== "property_id" && property[key] !== "") {
+      queryString += `${key} = $${valueCount}, `;
+      queryParams.push(property[key]);
+      valueCount += 1;
+    }
+  }
+  queryString = queryString.slice(0, queryString.length - 2);
+  queryString += ` WHERE id = ${property.property_id};`;
+  console.log(queryString);
+  console.log(queryParams);
+  return db
+    .query(queryString, queryParams)
+    .then((response) => {
+      return response.rows[0];
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+exports.addMyProperty = addMyProperty;
 
 const addReservation = function (reservation) {
   /*
