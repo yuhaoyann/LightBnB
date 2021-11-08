@@ -159,12 +159,34 @@ const getAllProperties = (options, limit = 10) => {
     pushQueryString("property_reviews.rating", ">=");
   }
 
+  if (options.minimum_bedroom) {
+    queryParams.push(options.minimum_bedroom);
+    pushQueryString("number_of_bedrooms", ">=");
+  }
+
+  if (options.maximum_bedroom) {
+    queryParams.push(options.maximum_bedroom);
+    pushQueryString("number_of_bedrooms", "<=");
+  }
+
+  if (options.minimum_bathroom) {
+    queryParams.push(options.minimum_bathroom);
+    pushQueryString("number_of_bathrooms", ">=");
+  }
+
+  if (options.maximum_bathroom) {
+    queryParams.push(options.maximum_bathroom);
+    pushQueryString("number_of_bathrooms", "<=");
+  }
+
   queryParams.push(limit);
   queryString += `
   GROUP BY properties.id
   ORDER BY cost_per_night
   LIMIT $${queryParams.length};
   `;
+  console.log(queryString);
+  console.log(queryParams);
 
   return db
     .query(queryString, queryParams)
