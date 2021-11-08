@@ -90,10 +90,36 @@ module.exports = function (router, database) {
     }
   });
 
+  router.post("/blockProperty", (req, res) => {
+    const userId = req.session.userId;
+    if (userId) {
+      database
+        .blockProperty({ ...req.body, guest_id: userId })
+        .then((reservation) => {
+          res.send(reservation);
+        })
+        .catch((e) => {
+          console.error(e);
+          res.send(e);
+        });
+    }
+  });
+
   router.get(`/reservations/:reservation_id`, (req, res) => {
     const reservationId = req.params.reservation_id;
     database
       .getIndividualReservation(reservationId)
+      .then((reservation) => res.send(reservation))
+      .catch((e) => {
+        console.error(e);
+        res.send(e);
+      });
+  });
+
+  router.get(`/blockProperty/:property_id`, (req, res) => {
+    const propertyId = req.params.property_id;
+    database
+      .getBlockedProperty(propertyId)
       .then((reservation) => res.send(reservation))
       .catch((e) => {
         console.error(e);

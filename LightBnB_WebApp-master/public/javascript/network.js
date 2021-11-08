@@ -86,8 +86,23 @@ const submitReservation = function (data) {
   });
 };
 
+const blockProperty = function (data) {
+  return $.ajax({
+    method: "POST",
+    url: "/api/blockProperty",
+    data,
+  });
+};
+
 function getIndividualReservation(reservationID) {
   let url = `/api/reservations/${reservationID}`;
+  return $.ajax({
+    url,
+  });
+}
+
+function getBlockedProperty(propertyID) {
+  let url = `/api/blockProperty/${propertyID}`;
   return $.ajax({
     url,
   });

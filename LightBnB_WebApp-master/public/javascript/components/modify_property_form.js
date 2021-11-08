@@ -128,5 +128,6 @@ $(() => {
         views_manager.show("myListings");
       });
     });
+    return false;
   });
 });

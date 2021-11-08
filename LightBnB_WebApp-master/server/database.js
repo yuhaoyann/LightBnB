@@ -295,6 +295,25 @@ const addReservation = function (reservation) {
 
 exports.addReservation = addReservation;
 
+const blockProperty = function (reservation) {
+  return db
+    .query(
+      `
+      INSERT INTO reservations (start_date, end_date, property_id, guest_id)
+      VALUES ($1, $2, $3, $4) RETURNING *;
+    `,
+      [
+        reservation.start_date,
+        reservation.end_date,
+        reservation.property_id,
+        reservation.guest_id,
+      ]
+    )
+    .then((res) => res.rows[0]);
+};
+
+exports.blockProperty = blockProperty;
+
 //
 //  Gets upcoming reservations
 //
@@ -321,6 +340,13 @@ const getIndividualReservation = function (reservationID) {
 };
 
 exports.getIndividualReservation = getIndividualReservation;
+
+const getBlockedProperty = function (propertyID) {
+  const queryString = `SELECT * FROM reservations WHERE reservations.property_id = $1 ORDER BY reservations.id`;
+  return db.query(queryString, [propertyID]).then((res) => res.rows);
+};
+
+exports.getBlockedProperty = getBlockedProperty;
 
 //
 //  Updates an existing reservation with new information
@@ -366,7 +392,6 @@ const deleteReservation = function (reservationId) {
 exports.deleteReservation = deleteReservation;
 
 const deleteMyProperties = function (propertyId) {
-  console.log(propertyId);
   const queryParams = [propertyId];
   const queryString = `DELETE FROM properties WHERE id = $1;`;
   return db

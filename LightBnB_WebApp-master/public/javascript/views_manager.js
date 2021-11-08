@@ -16,6 +16,8 @@ $(() => {
     $propertyReviews.detach();
     $newReviewForm.detach();
     $myPropertyListings.detach();
+    $blockPropertyForm.detach();
+    $(".blocked-reservations").detach();
 
     let dataTag = "";
 
@@ -41,6 +43,31 @@ $(() => {
       case "newReservation":
         dataTag = `<h4>${data}</h4>`;
         $newReservationForm.appendTo($main);
+        $("#datatag").empty();
+        $(dataTag).appendTo("#datatag");
+        break;
+      case "blockProperty":
+        const property_id = data[data.length - 1];
+        dataTag = `<h4>${property_id}</h4>`;
+        let data1 = data;
+        data1.pop();
+        let blockedReservations = `<h3 class="blocked-reservations">Blocked Period</h3>`;
+        for (let blocked of data1) {
+          blockedReservations += `
+            <div class="blocked-reservations">
+              <h4>From ${moment(blocked.start_date).format(
+                "MMMM DD, YYYY"
+              )} to ${moment(blocked.end_date).format("MMMM DD, YYYY")}</h4>
+              <button id="delete-property-${
+                blocked.id
+              }" class="delete-blocked-button">Delete<p class="hidden">${property_id}</p></button>
+            </div>
+          `;
+        }
+        $blockPropertyForm.appendTo($main);
+        if (data1[0]) {
+          $(blockedReservations).appendTo($main);
+        }
         $("#datatag").empty();
         $(dataTag).appendTo("#datatag");
         break;

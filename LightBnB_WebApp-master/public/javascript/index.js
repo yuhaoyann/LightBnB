@@ -35,6 +35,20 @@ $(() => {
       });
     });
 
+    $(document).on("click", ".delete-blocked-button", function () {
+      const idData = $(this).attr("id").substring(16);
+      const propertyId = $(this).text().substring(6);
+      const data = {};
+      data.reservation_Id = idData;
+      deleteReservation(data).then(() => {});
+      propertyListings.clearListings();
+      getBlockedProperty(propertyId).then((data) => {
+        let data1 = data;
+        data1.push(propertyId);
+        views_manager.show("blockProperty", data1);
+      });
+    });
+
     $(document).on("click", ".review_details", function () {
       const idData = $(this).attr("id").substring(15);
       views_manager.show("showReviews", idData);
@@ -62,6 +76,15 @@ $(() => {
           myPropertyListings.addProperties(json.properties);
           views_manager.show("myListings");
         });
+      });
+    });
+
+    $(document).on("click", ".block-property-button", function () {
+      const idData = $(this).attr("id").substring(15);
+      getBlockedProperty(idData).then((data) => {
+        let data1 = data;
+        data1.push(idData);
+        views_manager.show("blockProperty", data1);
       });
     });
   });

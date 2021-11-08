@@ -105,7 +105,11 @@ $(() => {
     const data = $(this).serialize();
     submitProperty(data)
       .then(() => {
-        views_manager.show("listings");
+        propertyListings.clearListings();
+        getAllListings().then(function (json) {
+          propertyListings.addProperties(json.properties);
+          views_manager.show("listings");
+        });
       })
       .catch((error) => {
         console.error(error);

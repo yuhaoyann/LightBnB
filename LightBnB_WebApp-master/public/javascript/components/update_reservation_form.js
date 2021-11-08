@@ -149,7 +149,7 @@ $(() => {
       </div>
 
       <div class="update-reservation-form__field-wrapper">
-        <button>Create</button>
+        <button>Update</button>
         <a id="reservation-form__cancel" href="#">Cancel</a>
       </div>
       <div id="datatag" class="hidden"></div>
@@ -167,9 +167,6 @@ $(() => {
     event.preventDefault();
     views_manager.show("none");
     const formArray = $(this).serializeArray();
-    console.log(formArray);
-
-    console.log(formArray);
     // check for presence of variables, if they're there, assign them
     if (formArray[0].value && formArray[1].value && formArray[2].value) {
       startDate = `${formArray[2].value}-${formArray[1].value}-${formArray[0].value}`;
