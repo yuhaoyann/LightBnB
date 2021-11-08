@@ -24,13 +24,18 @@ A combination of HTML, CSS, JS, jQuery, AJAX and SQL skills plus usage of Node, 
 
 ## Final Product
 
-!["main_"](https://github.com/yuhaoyann/tweeter/blob/master/docs/tweeter-wide.png)
-!["tweeter narrow"](https://github.com/yuhaoyann/tweeter/blob/master/docs/tweeter-narrow.png)
-!["tweeter long"](https://github.com/yuhaoyann/tweeter/blob/master/docs/tweet-long.png)
+!["main page"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/1.main_page.png)
+!["search property"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/2.search_property_page.png)
+!["create property"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/3.create_property_page.png)
+!["my reservation"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/4.my_reservation_page.png)
+!["my property"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/5.my_property_page.png)
+!["manage property availability"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/6.manage_property_availability_page.png)
+!["property review page"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/7.review_page.png)
 
 ## Dependencies
 
-- body-parser
-- chance
-- express
-- md5
+- "bcrypt": "^3.0.6",
+- "cookie-session": "^1.3.3",
+- "express": "^4.17.1",
+- "nodemon": "^1.19.1",
+- "pg": "^8.7.1"
