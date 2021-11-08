@@ -23,7 +23,7 @@ A combination of HTML, CSS, JS, jQuery, AJAX and SQL skills plus usage of Node, 
 * known bugs: when deleting properties or avilabilities, if the page does not refresh after clicking delete button, need to manual refresh page
 
 ## Final Product
-
+main page
 !["main page"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/1.main_page.png)
 !["search property"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/2.search_property_page.png)
 !["create property"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/3.create_property_page.png)
