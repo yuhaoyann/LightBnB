@@ -24,12 +24,18 @@ A combination of HTML, CSS, JS, jQuery, AJAX and SQL skills plus usage of Node, 
 
 ## Final Product
 main page
-!["main page"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/1.main_page.png)
-!["search property"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/2.search_property_page.png)
-!["create property"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/3.create_property_page.png)
-!["my reservation"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/4.my_reservation_page.png)
-!["my property"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/5.my_property_page.png)
-!["manage property availability"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/6.manage_property_availability_page.png)
+!["main page"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/1.main_page.png)<br />
+search property
+!["search property"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/2.search_property_page.png)<br />
+create property
+!["create property"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/3.create_property_page.png)<br />
+my reservation
+!["my reservation"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/4.my_reservation_page.png)<br />
+my property
+!["my property"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/5.my_property_page.png)<br />
+manage property availability
+!["manage property availability"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/6.manage_property_availability_page.png)<br />
+property review page
 !["property review page"](https://github.com/yuhaoyann/LightBnB/blob/master/docs/7.review_page.png)
 
 ## Dependencies
