@@ -185,8 +185,6 @@ const getAllProperties = (options, limit = 10) => {
   ORDER BY cost_per_night
   LIMIT $${queryParams.length};
   `;
-  console.log(queryString);
-  console.log(queryParams);
 
   return db
     .query(queryString, queryParams)
@@ -282,8 +280,7 @@ const addMyProperty = function (property) {
   }
   queryString = queryString.slice(0, queryString.length - 2);
   queryString += ` WHERE id = ${property.property_id};`;
-  console.log(queryString);
-  console.log(queryParams);
+
   return db
     .query(queryString, queryParams)
     .then((response) => {
@@ -390,7 +387,6 @@ const updateReservation = function (reservationData) {
   }
   queryString += ` WHERE id = $${queryParams.length + 1} RETURNING *;`;
   queryParams.push(reservationData.reservation_id);
-  console.log(queryString);
   return db
     .query(queryString, queryParams)
     .then((res) => res.rows[0])
